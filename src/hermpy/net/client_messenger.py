@@ -32,11 +32,23 @@ class ClientMESSENGER:
         PDS_BASE_URL: str = "https://pds-ppi.igpp.ucla.edu/data/",
         PDS_DATA_LOCATION: dict[str, Any] = {
             "MAG": "mess-mag-calibrated/data/mso/",
+            "MAG 1s": "mess-mag-calibrated/data/mso-avg/",
+            "MAG 5s": "mess-mag-calibrated/data/mso-avg/",
+            "MAG 10s": "mess-mag-calibrated/data/mso-avg/",
+            "MAG 60s": "mess-mag-calibrated/data/mso-avg/",
+        },
+        FILE_PATTERN: dict[str, str] = {
+            "MAG": "{{year:4d}}/{subdir}/MAGMSOSCI{{year:2d}}{{day_of_year:3d}}_V{{version}}.TAB",
+            "MAG 1s": "{{year:4d}}/{subdir}/MAGMSOSCIAVG{{year:2d}}{{day_of_year:3d}}_01_V{{version}}.TAB",
+            "MAG 5s": "{{year:4d}}/{subdir}/MAGMSOSCIAVG{{year:2d}}{{day_of_year:3d}}_05_V{{version}}.TAB",
+            "MAG 10s": "{{year:4d}}/{subdir}/MAGMSOSCIAVG{{year:2d}}{{day_of_year:3d}}_10_V{{version}}.TAB",
+            "MAG 60s": "{{year:4d}}/{subdir}/MAGMSOSCIAVG{{year:2d}}{{day_of_year:3d}}_60_V{{version}}.TAB",
         },
     ):
         # Paths defining where the data can be found
         self.PDS_BASE_URL = PDS_BASE_URL
         self.PDS_DATA_LOCATION = PDS_DATA_LOCATION
+        self.FILE_PATTERN = FILE_PATTERN
 
         # We want the user to be able to query for the existance of
         # files before downloading, so we introduce a search buffer to
@@ -56,10 +68,8 @@ class ClientMESSENGER:
         """
 
         pattern = (
-            f"{self.PDS_BASE_URL}{self.PDS_DATA_LOCATION[instrument]}"
-            "{{year:4d}}/"
-            "{subdir}/"
-            "MAGMSOSCI{{year:2d}}{{day_of_year:3d}}_V{{version}}.TAB"
+            f"{self.PDS_BASE_URL}{self.PDS_DATA_LOCATION[instrument]}/"
+            f"{self.FILE_PATTERN[instrument]}"
         )
 
         subdir = _get_subdir(time_range)
