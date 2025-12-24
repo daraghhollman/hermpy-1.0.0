@@ -1,10 +1,7 @@
 import calendar
 import datetime as dt
-import os
-from pathlib import Path
 from typing import Any
 
-import requests
 from astropy.time import Time
 from astropy.utils.data import download_files_in_parallel
 from sunpy.net import Scraper
@@ -20,7 +17,7 @@ def main():
 
     client = ClientMESSENGER()
 
-    q = client.query(TimeRange("2011-06-01", "2011-06-02"), "MAG")
+    client.query(TimeRange("2011-06-01", "2011-06-02"), "MAG")
 
     # We can access files with this function.
     local_paths = client.download()
