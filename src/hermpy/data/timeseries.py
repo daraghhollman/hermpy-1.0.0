@@ -17,12 +17,12 @@ def main():
     c.query(time_range, "MAG")
     file_paths = c.fetch()
 
-    data: QTable = _parse_messenger_mag(file_paths, time_range)
+    data: QTable = parse_messenger_mag(file_paths, time_range)
 
     print(data)
 
 
-def _parse_messenger_mag(file_paths: list[Path], time_range: TimeRange) -> QTable:
+def parse_messenger_mag(file_paths: list[Path], time_range: TimeRange) -> QTable:
 
     file_data: list[QTable] = []
     for path in file_paths:
