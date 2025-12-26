@@ -13,6 +13,7 @@ dependencies = [
     "matplotlib>=3.10.8",
     "mpl-animators>=1.2.4",
     "python-dateutil>=2.9.0.post0",
+    "spiceypy>=8.0.0",
     "sunpy>=7.1.0",
     "zeep>=4.3.2",
 ]
