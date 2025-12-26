@@ -1,5 +1,6 @@
 import calendar
 import datetime as dt
+from pathlib import Path
 from typing import Any
 
 from astropy.time import Time
@@ -108,7 +109,7 @@ class ClientMESSENGER:
 
         return urls
 
-    def fetch(self, check_for_updates: bool = False) -> list:
+    def fetch(self, check_for_updates: bool = False) -> list[Path]:
         """
         Download and fetch files in self.query_buffer and clears the buffer. If
         files are already downloaded, fetch them.
