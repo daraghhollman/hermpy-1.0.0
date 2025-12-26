@@ -30,6 +30,6 @@ print(query)
 # be downloaded if not already in cache, and their path returned. The query
 # buffer is automatically flushed after this call.
 # Redownloads can be forced with check_for_updates=True
-local_paths = client.download()
+local_paths = client.fetch()
 
 print(local_paths)

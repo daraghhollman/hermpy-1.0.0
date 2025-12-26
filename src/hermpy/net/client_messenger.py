@@ -20,7 +20,7 @@ def main():
     client.query(TimeRange("2011-06-01", "2011-06-02"), "MAG")
 
     # We can access files with this function.
-    local_paths = client.download()
+    local_paths = client.fetch()
 
     print(local_paths)
 
@@ -108,9 +108,10 @@ class ClientMESSENGER:
 
         return urls
 
-    def download(self, check_for_updates: bool = False) -> list:
+    def fetch(self, check_for_updates: bool = False) -> list:
         """
-        Download files in self.query_buffer and clears the buffer.
+        Download and fetch files in self.query_buffer and clears the buffer. If
+        files are already downloaded, fetch them.
         """
 
         data_paths = download_files_in_parallel(
