@@ -32,11 +32,14 @@ class ClientMESSENGER:
         self,
         PDS_BASE_URL: str = "https://pds-ppi.igpp.ucla.edu/data/",
         PDS_DATA_LOCATION: dict[str, Any] = {
+            # MAG
             "MAG": "mess-mag-calibrated/data/mso/",
             "MAG 1s": "mess-mag-calibrated/data/mso-avg/",
             "MAG 5s": "mess-mag-calibrated/data/mso-avg/",
             "MAG 10s": "mess-mag-calibrated/data/mso-avg/",
             "MAG 60s": "mess-mag-calibrated/data/mso-avg/",
+            # FIPS
+            "FIPS": "mess-epps-fips-calibrated/data/scan/",
         },
         FILE_PATTERN: dict[str, str] = {
             "MAG": "{{year:4d}}/{subdir}/MAGMSOSCI{{year:2d}}{{day_of_year:3d}}_V{{version}}.TAB",
@@ -44,6 +47,8 @@ class ClientMESSENGER:
             "MAG 5s": "{{year:4d}}/{subdir}/MAGMSOSCIAVG{{year:2d}}{{day_of_year:3d}}_05_V{{version}}.TAB",
             "MAG 10s": "{{year:4d}}/{subdir}/MAGMSOSCIAVG{{year:2d}}{{day_of_year:3d}}_10_V{{version}}.TAB",
             "MAG 60s": "{{year:4d}}/{subdir}/MAGMSOSCIAVG{{year:2d}}{{day_of_year:3d}}_60_V{{version}}.TAB",
+            # FIPS
+            "FIPS": "{{year:4d}}/{subdir}/FIPS_R{{year:4d}}{{day_of_year:3d}}CDR_V{{version}}.TAB",
         },
     ):
         # Paths defining where the data can be found
@@ -69,7 +74,7 @@ class ClientMESSENGER:
         """
 
         pattern = (
-            f"{self.PDS_BASE_URL}{self.PDS_DATA_LOCATION[instrument]}/"
+            f"{self.PDS_BASE_URL}{self.PDS_DATA_LOCATION[instrument]}"
             f"{self.FILE_PATTERN[instrument]}"
         )
 
