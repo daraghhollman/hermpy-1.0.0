@@ -104,21 +104,23 @@ class TimeseriesPanel(Panel):
         hence can be plotted together.
         """
 
-        column_units: list[u.Unit] = []
+        units = []
+
         for column_name in self.table.colnames:
-            # Skip time column
+            # Skip the time column
             if column_name == self.time_column:
                 continue
 
-            column_units.append(self.table[column_name].unit)
-            self._unit = self.table[column_name].unit
+            unit = self.table[column_name].unit
+            units.append(unit)
 
-        # Check only 1 unique unit
-        unique_units = set(column_units)
-        if len(unique_units) != 1:
-            raise ValueError(
-                f"Panel data has multiple units: {unique_units}. Cannot add to the same axis!"
-            )
+        base_unit = units[0]
+
+        for unit in units[1:]:
+            if not unit.is_equivalent(base_unit):
+                raise ValueError(f"Panel data has multiple incompatible units: {units}")
+
+        self._unit = base_unit
 
     def _plot_on(self, ax):
         for column_name in self.table.colnames:
