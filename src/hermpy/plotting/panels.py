@@ -12,7 +12,6 @@ from astropy.table import QTable
 
 
 class MultiPanel:
-
     def __init__(self, panels: list[Panel]):
         self._panels = panels
 
@@ -90,7 +89,6 @@ class Panel(ABC):
 
 
 class TimeseriesPanel(Panel):
-
     def __init__(self, table: QTable, time_column: str = "UTC"):
         super().__init__(time_column)
         self.table = table
@@ -108,7 +106,6 @@ class TimeseriesPanel(Panel):
 
         column_units: list[u.Unit] = []
         for column_name in self.table.colnames:
-
             # Skip time column
             if column_name == self.time_column:
                 continue
@@ -155,7 +152,6 @@ class SpectrogramPanel(Panel):
         cmap="viridis",
         yscale="log",
     ):
-
         self.data = data
         self.time_dim = time_dim
         self.y_dim = y_dim
@@ -166,7 +162,6 @@ class SpectrogramPanel(Panel):
         self.yscale = yscale
 
     def _plot_on(self, ax):
-
         mesh = ax.pcolormesh(
             # Assuming timestamps are right edges, we drop the first data column.
             self.data[self.time_dim],

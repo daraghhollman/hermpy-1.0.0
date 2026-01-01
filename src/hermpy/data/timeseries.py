@@ -8,10 +8,8 @@ from sunpy.time import TimeRange
 
 
 def parse_messenger_mag(file_paths: list[Path], time_range: TimeRange) -> QTable:
-
     file_data: list[QTable] = []
     for path in file_paths:
-
         table = ascii.read(path)
         assert type(table) == Table
 
@@ -31,7 +29,6 @@ def parse_messenger_mag(file_paths: list[Path], time_range: TimeRange) -> QTable
         # For MESSENGER MAG at full cadence, the files contain 12 columns. Time
         # averaged products contain 16 columns.
         match len(table.colnames):
-
             # Full Cadence
             case 12:
                 file_data.append(

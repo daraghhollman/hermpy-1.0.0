@@ -10,7 +10,6 @@ from astropy.utils.data import download_files_in_parallel
 
 
 class ClientSPICE:
-
     def __init__(
         self,
         KERNEL_LOCATIONS: dict[str, dict[str, Any]] = {
@@ -90,7 +89,6 @@ def list_remote_files(url: str) -> list[str]:
 
 
 def expand_patterns(base_url: str, directory: str, patterns: list[str]) -> list[str]:
-
     full_dir_url = base_url + directory
     files = list_remote_files(full_dir_url)
 

@@ -27,7 +27,6 @@ def main():
 
 
 class ClientMESSENGER:
-
     def __init__(
         self,
         PDS_BASE_URL: str = "https://pds-ppi.igpp.ucla.edu/data/",
@@ -83,7 +82,6 @@ class ClientMESSENGER:
         if isinstance(subdir, list):
             urls: list[Any] = []
             for s in subdir:
-
                 pattern_kwargs = {
                     "subdir": s,
                 }

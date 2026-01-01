@@ -7,10 +7,8 @@ from sunpy.time import TimeRange
 
 
 def parse_messenger_fips(file_paths: list[Path], time_range: TimeRange) -> xr.Dataset:
-
     file_data: list[xr.Dataset] = []
     for path in file_paths:
-
         # Parse the time
         time_strings = np.genfromtxt(
             path,

@@ -28,7 +28,6 @@ spice_client.KERNEL_LOCATIONS.update(
 # We open a context in which we load kernels from ClientSPICE. For more details
 # see the spiceypy documentation.
 with spice.KernelPool(spice_client.fetch()):
-
     et = spice.datetime2et(dt.datetime(2012, 6, 1))
     position, _ = spice.spkpos("MESSENGER", et, "BC_MSO_AB", "NONE", "Mercury")
 
@@ -39,7 +38,6 @@ with spice.KernelPool(spice_client.fetch()):
 # is that the spice client performs the fetch, passes it to spice.KernelPool(),
 # and yields the contextmanager.
 with spice_client.KernelPool():
-
     et = spice.datetime2et(dt.datetime(2012, 6, 1))
     position, _ = spice.spkpos("MESSENGER", et, "BC_MSO_AB", "NONE", "Mercury")
 
