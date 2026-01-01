@@ -1,9 +1,11 @@
 import re
+from contextlib import contextmanager
 from fnmatch import fnmatch
 from pathlib import Path
 from typing import Any
 from urllib.request import urlopen
 
+import spiceypy as spice
 from astropy.utils.data import download_files_in_parallel
 
 
@@ -69,6 +71,12 @@ class ClientSPICE:
         self._query_buffer = []
 
         return data_paths
+
+    # We want this class to be able to function as a spiceypy.KernelPool()
+    @contextmanager
+    def KernelPool(self):
+        with spice.KernelPool(self.fetch()):
+            yield
 
 
 def list_remote_files(url: str) -> list[str]:

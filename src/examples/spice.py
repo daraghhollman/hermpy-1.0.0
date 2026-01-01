@@ -33,3 +33,14 @@ with spice.KernelPool(spice_client.fetch()):
     position, _ = spice.spkpos("MESSENGER", et, "BC_MSO_AB", "NONE", "Mercury")
 
     print(position)
+
+# Equivalently (and preferably), we define a context manager within
+# spice_client to perform the same role. All that happens under the hood here
+# is that the spice client performs the fetch, passes it to spice.KernelPool(),
+# and yields the contextmanager.
+with spice_client.KernelPool():
+
+    et = spice.datetime2et(dt.datetime(2012, 6, 1))
+    position, _ = spice.spkpos("MESSENGER", et, "BC_MSO_AB", "NONE", "Mercury")
+
+    print(position)
