@@ -7,21 +7,6 @@ from astropy.time import Time
 from sunpy.time import TimeRange
 
 
-def main():
-
-    # For testing purposes, lets load some data
-    from hermpy.net import ClientMESSENGER
-
-    c = ClientMESSENGER()
-    time_range = TimeRange("2011-06-01T00:00", "2011-06-01T01:00")
-    c.query(time_range, "MAG")
-    file_paths = c.fetch()
-
-    data: QTable = parse_messenger_mag(file_paths, time_range)
-
-    print(data)
-
-
 def parse_messenger_mag(file_paths: list[Path], time_range: TimeRange) -> QTable:
 
     file_data: list[QTable] = []
@@ -96,7 +81,3 @@ def parse_messenger_mag(file_paths: list[Path], time_range: TimeRange) -> QTable
     ]
 
     return merged_and_sliced_table
-
-
-if __name__ == "__main__":
-    main()
