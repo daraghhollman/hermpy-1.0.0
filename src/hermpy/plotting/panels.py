@@ -25,7 +25,7 @@ class MultiPanel:
             return MultiPanel([*self._panels, other])
 
         else:
-            raise NotImplemented
+            raise NotImplementedError
 
     def plot(self, sharex=True, show=True, figsize: tuple[int, int] | None = None):
         n = len(self._panels)
