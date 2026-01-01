@@ -1,10 +1,26 @@
 from pathlib import Path
 
+import numpy as np
 from astropy import units as u
 from astropy.io import ascii
 from astropy.table import QTable, Table, vstack
 from astropy.time import Time
 from sunpy.time import TimeRange
+
+
+def add_field_magnitude(table: QTable) -> QTable:
+    """
+    A function to add magnetic field magnitude to any QTable with columns 'Bx',
+    'By', and 'Bz'.
+    Column '|B|' is added to the table.
+    """
+
+    new_table = table.copy()
+
+    components = ["Bx", "By", "Bz"]
+    new_table["|B|"] = np.sqrt(sum(table[var] ** 2 for var in components))
+
+    return new_table
 
 
 def parse_messenger_mag(file_paths: list[Path], time_range: TimeRange) -> QTable:
