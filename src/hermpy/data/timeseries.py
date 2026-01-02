@@ -7,6 +7,8 @@ from astropy.table import QTable, Table, vstack
 from astropy.time import Time
 from sunpy.time import TimeRange
 
+from hermpy.data.trajectories import get_aberration_angle
+
 
 def add_field_magnitude(table: QTable) -> QTable:
     """
@@ -21,6 +23,61 @@ def add_field_magnitude(table: QTable) -> QTable:
     new_table["|B|"] = np.sqrt(sum(table[var] ** 2 for var in components))
 
     return new_table
+
+
+def rotate_to_aberrated_coordinates(table: QTable, time_column="UTC") -> QTable:
+    """
+    Add aberrated terms to a timeseries table, rotating around the Z axis by
+    the aberration angle (updated daily). Caching of the aberration angle is
+    used for quick computation. We assume an average solar wind speed of 400
+    km/s.
+    """
+
+    times = table[time_column].to_datetime()
+    aberration_angles: u.Quantity = get_aberration_angle(times)
+
+    # Create rotation matrices
+    cos_angles = np.cos(aberration_angles)
+    sin_angles = np.sin(aberration_angles)
+
+    rotation_matrices = np.array(
+        [
+            [
+                [c, -s, 0],
+                [s, c, 0],
+                [0, 0, 1],
+            ]
+            for c, s in zip(cos_angles, sin_angles)
+        ]
+    )
+
+    # We want this to work no matter which columns this table includes.
+    column_sets = [
+        ["X MSO", "Y MSO", "Z MSO"],
+        ["X MSM", "Y MSM", "Z MSM"],
+        ["Bx", "By", "Bz"],
+    ]
+
+    for cols in column_sets:
+        # Only process if *all* columns of that exist
+        if not all(c in table.colnames for c in cols):
+            continue
+
+        # Perform rotation
+        data = np.vstack([table[c] for c in cols]).T
+        rotated = np.einsum("nij,nj->ni", rotation_matrices, data)
+
+        # Add new columns
+        for i, col in enumerate(cols):
+            new_name = f"{col}'"
+
+            # We round to 3 decimals to match the data. Its nice to stay
+            # consistent, an we don't want to overstate our accuracy.
+            table[new_name] = np.round(rotated[:, i], 3)
+
+    table["Aberration Angle"] = np.round(aberration_angles, 3)
+
+    return table
 
 
 def parse_messenger_mag(file_paths: list[Path], time_range: TimeRange) -> QTable:
