@@ -4,8 +4,7 @@ from sunpy.time import TimeRange
 
 from hermpy.data import parse_messenger_fips, parse_messenger_mag
 from hermpy.net import ClientMESSENGER
-from hermpy.plotting import SpectrogramPanel, TimeseriesPanel
-from hermpy.plotting.panels import MultiPanel
+from hermpy.plotting import MultiPanel, SpectrogramPanel, TimeseriesPanel
 
 # First we must get some data. Here we fetch MESSENGER MAG and FIPS data for a
 # particular time range. For more details on ClientMESSENGER, see
