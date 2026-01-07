@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pandas as pd
 from astropy.table import QTable, Table
+from astropy.time import Time
 
 
 class EventList(ABC):
@@ -50,6 +51,9 @@ class CrossingList:
         df = pd.read_csv(csv_path)
 
         table = Table.from_pandas(df)
+
+        table[time_column] = Time(table[time_column])
+
         table = QTable(table)
 
         return InstantEventList(table, time_column=time_column)
