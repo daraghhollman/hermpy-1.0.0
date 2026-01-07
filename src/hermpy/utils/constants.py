@@ -2,7 +2,7 @@ import astropy.units as u
 
 
 class Constants:
-    MERCURY_RADIUS = 2_439_700 * u.km
+    MERCURY_RADIUS = 2_439_700 * u.m
 
     DIPOLE_OFFSET = 479 * u.km
     DIPOLE_OFFSET_RADII = DIPOLE_OFFSET / MERCURY_RADIUS
