@@ -128,7 +128,7 @@ class TimeseriesPanel(Panel):
                 continue
 
             ax.plot(
-                self.table[self.time_column].to_datetime(),
+                self.table[self.time_column].to_datetime(leap_second_strict="warn"),
                 self.table[column_name].value,
                 label=column_name,
             )

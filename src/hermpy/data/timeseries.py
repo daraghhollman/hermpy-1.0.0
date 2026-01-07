@@ -33,7 +33,7 @@ def rotate_to_aberrated_coordinates(table: QTable, time_column="UTC") -> QTable:
     km/s.
     """
 
-    times = table[time_column].to_datetime()
+    times = table[time_column].to_datetime(leap_second_strict="warn")
     aberration_angles: u.Quantity = get_aberration_angle(times)
 
     # Create rotation matrices

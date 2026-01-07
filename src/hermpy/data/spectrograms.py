@@ -19,7 +19,7 @@ def parse_messenger_fips(file_paths: list[Path], time_range: TimeRange) -> xr.Da
             time_strings,
             format_string="%Y-%jT%H:%M:%S.%f",
             scale="utc",
-        ).to_datetime()
+        ).to_datetime(leap_second_strict="warn")
 
         # Parse the data
         # Unit: counts/(s*(keV/e)*cm**2*sr)
@@ -77,7 +77,10 @@ def parse_messenger_fips(file_paths: list[Path], time_range: TimeRange) -> xr.Da
     multi_file_data = xr.concat(file_data, dim="UTC")
 
     stripped_multi_file_data = multi_file_data.sel(
-        UTC=slice(time_range.start.to_datetime(), time_range.end.to_datetime())
+        UTC=slice(
+            time_range.start.to_datetime(leap_second_strict="warn"),
+            time_range.end.to_datetime(leap_second_strict="warn"),
+        )
     )
 
     return stripped_multi_file_data
