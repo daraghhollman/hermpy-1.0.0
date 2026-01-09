@@ -37,6 +37,20 @@ class ClientSPICE:
     ):
         self.KERNEL_LOCATIONS = KERNEL_LOCATIONS
         self._query_buffer: list[str] = []
+        self._local_buffer: list[Path] = []
+
+    def add_local_kernels(self, paths: list[Path]) -> None:
+        """
+        Adds files to _local_buffer to be loaded when fetched.
+        """
+
+        self._local_buffer.extend(paths)
+
+    def flush_local_kernel_buffer(self) -> None:
+        """
+        Flush the local kernel buffer.
+        """
+        self._local_buffer: list[Path] = []
 
     def fetch(self, check_for_updates: bool = False) -> list[Path]:
         """
@@ -64,7 +78,8 @@ class ClientSPICE:
         # Flush query buffer
         self._query_buffer = []
 
-        return data_paths
+        # Return downloaded paths and anything in the local buffer.
+        return data_paths + self._local_buffer
 
     # We want this class to be able to function as a spiceypy.KernelPool()
     @contextmanager
