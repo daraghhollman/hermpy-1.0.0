@@ -52,7 +52,7 @@ class ClientSPICE:
         """
         self._local_buffer: list[Path] = []
 
-    def fetch(self, check_for_updates: bool = False) -> list[Path]:
+    def fetch(self, check_for_updates: bool = False) -> list[str]:
         """
         Download and fetch files in self.query_buffer and clears the buffer. If
         files are already downloaded, fetch them.
@@ -79,7 +79,7 @@ class ClientSPICE:
         self._query_buffer = []
 
         # Return downloaded paths and anything in the local buffer.
-        return data_paths + self._local_buffer
+        return data_paths + [str(p) for p in self._local_buffer]
 
     # We want this class to be able to function as a spiceypy.KernelPool()
     @contextmanager
