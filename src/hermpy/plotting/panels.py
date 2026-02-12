@@ -174,7 +174,7 @@ class SpectrogramPanel(Panel):
             cmap=self.cmap,
         )
 
-        cbar_bounds = [1.02, 0, 0.02, 1]
+        cbar_bounds = (1.02, 0, 0.02, 1)
         self.cbar_ax = ax.inset_axes(cbar_bounds)
 
         self.cbar = plt.colorbar(mesh, cax=self.cbar_ax)
