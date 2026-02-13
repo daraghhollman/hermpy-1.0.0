@@ -75,9 +75,6 @@ class ClientSPICE:
             pkgname="hermpy",
         )
 
-        # Flush query buffer
-        self._query_buffer = []
-
         # Return downloaded paths and anything in the local buffer.
         return data_paths + [str(p) for p in self._local_buffer]
 
