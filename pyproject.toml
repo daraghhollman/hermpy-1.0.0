@@ -1,11 +1,12 @@
 [project]
 name = "hermpy"
-version = "0.2.6"
+version = "0.2.7"
 description = "Tools for space science at Mercury"
 keywords = ["hermpy", "mercury", "space", "science", "messenger", "bepicolombo"]
 
 authors = [
-    {name = "Daragh M. Hollman", email = "daragh.hollman@dias.ie"}
+    {name = "Daragh M. Hollman", email = "daragh.hollman@dias.ie"},
+    {name = "Danny O'Carroll"}
 ]
 
 readme = "README.md"
