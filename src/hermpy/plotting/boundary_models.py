@@ -1,14 +1,17 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from typing import Literal
 
 
 def plot_magnetospheric_boundaries(
     ax: plt.Axes,
-    plane: str = "xy",
+    plane: Literal["xy","yz","xz"] = "xy",
+    frame: Literal["MSM", "MSO"] = "MSM",
     sub_solar_magnetopause: float = 1.45,
     alpha: float = 0.5,
     psi: float = 1.04,
     p: float = 2.75,
+    Zd: float = 0.196,
     initial_x: float = 0.5,
     add_legend: bool = False,
     zorder: int = 0,
@@ -47,6 +50,11 @@ def plot_magnetospheric_boundaries(
 
     magnetopause_x_coords = rho * np.cos(phi)
     magnetopause_y_coords = rho * np.sin(phi)
+    if frame=="MSM":
+        magnetopause_z_coords = magnetopause_y_coords
+    else:
+        magnetopause_z_coords = magnetopause_y_coords + Zd
+
 
     L = psi * p
 
@@ -60,60 +68,43 @@ def plot_magnetospheric_boundaries(
     bowshock_y_coords = bowshock_y_coords[bowshock_x_coords < 2]
     bowshock_x_coords = bowshock_x_coords[bowshock_x_coords < 2]
 
-    match plane:
-        case "xy":
-            bowshock_label = ""
-            magnetopause_label = ""
+    if frame=="MSM":
+        bowshock_z_coords = bowshock_y_coords
+    else:
+        bowshock_z_coords = bowshock_y_coords + Zd
 
-            if add_legend:
-                bowshock_label = "Avg. Bowshock (Winslow et al. 2013)"
-                magnetopause_label = "Avg. Magnetopause (Winslow et al. 2013)"
+    configs = {
+            "xy": (bowshock_x_coords, bowshock_y_coords, magnetopause_x_coords, magnetopause_y_coords),
+            "yz": (bowshock_y_coords, bowshock_z_coords, magnetopause_y_coords, magnetopause_z_coords),
+            "xz": (bowshock_x_coords, bowshock_z_coords, magnetopause_x_coords, magnetopause_z_coords),
+            }
+    
+    # Set coordinates for desired plane
+    bowshock_x_coords, bowshock_y_coords, magnetopause_x_coords, magnetopause_y_coords = configs[plane]
+    
+    bowshock_label = ""
+    magnetopause_label = ""
 
-            ax.plot(
-                magnetopause_x_coords,
-                magnetopause_y_coords,
-                ls="--",
-                lw=lw,
-                color=color,
-                label=magnetopause_label,
-                zorder=zorder,
-            )
-            ax.plot(
-                bowshock_x_coords,
-                bowshock_y_coords,
-                ls="-",
-                lw=lw,
-                color=color,
-                label=magnetopause_label,
-                zorder=zorder,
-            )
+    if add_legend:
+        bowshock_label = "Avg. Bowshock (Winslow et al. 2013)"
+        magnetopause_label = "Avg. Magnetopause (Winslow et al. 2013)"
 
-        case "xz":
-            bowshock_label = ""
-            magnetopause_label = ""
+    ax.plot(
+        magnetopause_x_coords,
+        magnetopause_y_coords,
+        ls="--",
+        lw=lw,
+        color=color,
+        label=magnetopause_label,
+        zorder=zorder,
+    )
+    ax.plot(
+        bowshock_x_coords,
+        bowshock_y_coords,
+        ls="-",
+        lw=lw,
+        color=color,
+        label=bowshock_label,
+        zorder=zorder,
+    )
 
-            if add_legend:
-                bowshock_label = "Avg. Bowshock (Winslow et al. 2013)"
-                magnetopause_label = "Avg. Magnetopause (Winslow et al. 2013)"
-
-            ax.plot(
-                magnetopause_x_coords,
-                magnetopause_y_coords,
-                ls="--",
-                lw=lw,
-                color=color,
-                label=magnetopause_label,
-                zorder=zorder,
-            )
-            ax.plot(
-                bowshock_x_coords,
-                bowshock_y_coords,
-                ls="-",
-                lw=lw,
-                color=color,
-                zorder=zorder,
-                label=bowshock_label,
-            )
-
-        case "yz":
-            pass
