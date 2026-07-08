@@ -6,9 +6,10 @@ from hermpy.utils.constants import Constants
 
 frame_types = Literal["MSM", "MSO"]
 
+
 def plot_magnetospheric_boundaries(
     ax: plt.Axes,
-    plane: Literal["xy","yz","xz"] = "xy",
+    plane: Literal["xy", "yz", "xz"] = "xy",
     frame: frame_types = "MSM",
     sub_solar_magnetopause: float = 1.45,
     alpha: float = 0.5,
@@ -55,13 +56,14 @@ def plot_magnetospheric_boundaries(
 
     magnetopause_x_coords = rho * np.cos(phi)
     magnetopause_y_coords = rho * np.sin(phi)
-    if frame=="MSM":
+    if frame == "MSM":
         magnetopause_z_coords = magnetopause_y_coords
-    elif frame=="MSO":
+    elif frame == "MSO":
         magnetopause_z_coords = magnetopause_y_coords + Zd
     else:
-        raise ValueError(f"Invalid frame: {frame!r}. Must be one of {get_args(frame_types)}")
-
+        raise ValueError(
+            f"Invalid frame: {frame!r}. Must be one of {get_args(frame_types)}"
+        )
 
     L = psi * p
 
@@ -75,22 +77,44 @@ def plot_magnetospheric_boundaries(
     bowshock_y_coords = bowshock_y_coords[bowshock_x_coords < 2]
     bowshock_x_coords = bowshock_x_coords[bowshock_x_coords < 2]
 
-    if frame=="MSM":
+    if frame == "MSM":
         bowshock_z_coords = bowshock_y_coords
-    elif frame =="MSO":
+    elif frame == "MSO":
         bowshock_z_coords = bowshock_y_coords + Zd
     else:
-        raise ValueError(f"Invalid frame: {frame!r}. Must be one of {get_args(frame_types)}")
+        raise ValueError(
+            f"Invalid frame: {frame!r}. Must be one of {get_args(frame_types)}"
+        )
 
     plane_coordinates = {
-            "xy": (bowshock_x_coords, bowshock_y_coords, magnetopause_x_coords, magnetopause_y_coords),
-            "yz": (bowshock_y_coords, bowshock_z_coords, magnetopause_y_coords, magnetopause_z_coords),
-            "xz": (bowshock_x_coords, bowshock_z_coords, magnetopause_x_coords, magnetopause_z_coords),
-            }
-    
+        "xy": (
+            bowshock_x_coords,
+            bowshock_y_coords,
+            magnetopause_x_coords,
+            magnetopause_y_coords,
+        ),
+        "yz": (
+            bowshock_y_coords,
+            bowshock_z_coords,
+            magnetopause_y_coords,
+            magnetopause_z_coords,
+        ),
+        "xz": (
+            bowshock_x_coords,
+            bowshock_z_coords,
+            magnetopause_x_coords,
+            magnetopause_z_coords,
+        ),
+    }
+
     # Set coordinates for desired plane
-    bowshock_x_coords, bowshock_y_coords, magnetopause_x_coords, magnetopause_y_coords = plane_coordinates[plane]
-    
+    (
+        bowshock_x_coords,
+        bowshock_y_coords,
+        magnetopause_x_coords,
+        magnetopause_y_coords,
+    ) = plane_coordinates[plane]
+
     bowshock_label = ""
     magnetopause_label = ""
 
