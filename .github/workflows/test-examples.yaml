@@ -1,0 +1,79 @@
+name: Run Examples
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  run-examples:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: ["3.12", "3.13", "3.14"]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v8.1.0
+        with:
+          python-version: ${{ matrix.python-version }}
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run all example scripts (bash)
+        if: runner.os != 'Windows'
+        run: |
+          failures=0
+          for f in src/examples/*.py; do
+            echo "::group::Running $f"
+            if uv run python "$f"; then
+              echo "PASS: $f"
+            else
+              echo "FAIL: $f"
+              failures=$((failures + 1))
+            fi
+            echo "::endgroup::"
+          done
+
+          if [ "$failures" -ne 0 ]; then
+            echo "$failures example(s) failed"
+            exit 1
+          fi
+
+          echo "All examples passed"
+
+      - name: Run all example scripts (PowerShell)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $failures = 0
+          $files = Get-ChildItem -Path "src/examples" -Filter "*.py" -Recurse
+
+          foreach ($f in $files) {
+            Write-Host "::group::Running $($f.FullName)"
+            uv run python $f.FullName
+            if ($LASTEXITCODE -ne 0) {
+              Write-Host "FAIL: $($f.FullName)"
+              $failures++
+            } else {
+              Write-Host "PASS: $($f.FullName)"
+            }
+            Write-Host "::endgroup::"
+          }
+
+          if ($failures -ne 0) {
+            Write-Host "$failures example(s) failed"
+            exit 1
+          }
+
+          Write-Host "All examples passed"
